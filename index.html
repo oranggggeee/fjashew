@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Display</title>
+    <title>Image URL Generator</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             height: 100vh;
             margin: 0;
             background-color: #f0f0f0;
@@ -21,18 +22,53 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
+        input[type="file"] {
+            display: none;
+        }
+        .custom-file-upload {
+            display: inline-block;
+            padding: 6px 12px;
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 4px;
+        }
+        #url {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Document Image</h1>
-        <img src="image.png" alt="">
-        <p>This is the document image you provided.</p>
+        <h1>Image URL Generator</h1>
+        <label for="file-upload" class="custom-file-upload">
+            Choose Image
+        </label>
+        <input id="file-upload" type="file" accept="image/*" />
+        <input type="text" id="url" placeholder="Image URL will appear here" readonly />
+        <p id="instructions">Upload an image to generate a URL.</p>
+        <img id="uploaded-image" src="" alt="Uploaded Image" style="display:none; margin-top: 10px; max-width: 100%; border-radius: 8px;" />
     </div>
+    <script>
+        document.getElementById('file-upload').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imgElement = document.getElementById('uploaded-image');
+                    const urlElement = document.getElementById('url');
+                    imgElement.src = e.target.result;
+                    imgElement.style.display = 'block';
+                    urlElement.value = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
 </body>
 </html>
+
